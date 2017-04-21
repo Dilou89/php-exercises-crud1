@@ -31,7 +31,7 @@ While($data=mysqli_fetch_assoc($top20)){
 <?php
 
 echo "clients avec carte fidelité   :"."</br>";
-$CF=mysqli_query($connect,"SELECT *FROM clients WHERE card=1 ");
+$CF=mysqli_query($connect,'SELECT clients.lastName FROM clients JOIN cards ON cards.cardNumber=clients.cardNumber WHERE cards.cardTypesId=1');
 While($data=mysqli_fetch_assoc($CF)){
 	echo $data['lastName']."</br>";
 
@@ -55,7 +55,17 @@ While($data=mysqli_fetch_assoc($show)){
 ?>
 <hr>
 <?php
-$client = $connect->query('SELECT *FROM clients WHERE card = 1');
-While($data=mysqli_fetch_assoc($client)){
-	echo "Nom :".$data['lastName']."</br>"."Prenom: ".$data['firstName']."</br>". "Date de naissance :" .$data['birthDate']."</br>"."Numéro de card: ".$data['cardNumber']."</br>"."</br>";
-};
+$clientCF = $connect->query('SELECT * FROM clients LEFT OUTER JOIN cards ON cards.cardNumber=clients.cardNumber') ;
+While($data=mysqli_fetch_assoc($clientCF)){
+	if($data['cardTypesId']!=1){
+		echo "Nom :".$data['lastName']."</br>"."Prenom: ".$data['firstName']."</br>". "Date de naissance :" .$data['birthDate']."</br>";
+		echo "Carte de fidélité : non".'<br/>';}
+
+		else{
+
+			echo "Carte de fidélité : oui    Numéro de card: ". $data['cardNumber']."<br/>";
+		}
+
+
+
+	};
